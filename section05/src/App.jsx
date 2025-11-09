@@ -2,14 +2,24 @@ import "./App.css";
 import Header from "./conponents/Header";
 import Main from "./conponents/Main";
 import Footer from "./conponents/Footer";
+import Button from "./conponents/Button";
 
 function App() {
+  const buttonProps = {
+    text: "메일",
+    color: "red",
+    a: 1,
+    b: 2,
+    c: 3,
+  };
+
   return (
     <>
-      <Header /> {/* 자식 컴포넌트 */}
-      <Main />
-      <h1>안녕 리액트</h1> {/* 부모 컴포넌트(최상위) -> root 컴포넌트 */}
-      <Footer />
+      <Button {...buttonProps} />
+      <Button text={"카페"} />
+      <Button text={"블로그"}>
+        <Header />
+      </Button>
     </>
   );
 }
