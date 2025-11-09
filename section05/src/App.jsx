@@ -1,25 +1,33 @@
 import "./App.css";
-import Header from "./conponents/Header";
-import Main from "./conponents/Main";
-import Footer from "./conponents/Footer";
-import Button from "./conponents/Button";
+import { useState } from "react";
 
 function App() {
-  const buttonProps = {
-    text: "메일",
-    color: "red",
-    a: 1,
-    b: 2,
-    c: 3,
-  };
+  const [count, setCount] = useState(0);
+  const [light, setLight] = useState("OFF");
+  // let light = "OFF"; 로 일반 변수를 사용하면 리렌더링 되지 않음
 
   return (
     <>
-      <Button {...buttonProps} />
-      <Button text={"카페"} />
-      <Button text={"블로그"}>
-        <Header />
-      </Button>
+      <div>
+        <h1>{light}</h1>
+        <button
+          onClick={() => {
+            setLight(light === "ON" ? "OFF" : "ON");
+          }}
+        >
+          전구 {light === "ON" ? "끄기" : "켜기"}
+        </button>
+      </div>
+      <div>
+        <h1>{count}</h1>
+        <button
+          onClick={() => {
+            setCount(count + 1);
+          }}
+        >
+          +
+        </button>
+      </div>
     </>
   );
 }
