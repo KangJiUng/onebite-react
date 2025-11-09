@@ -1,16 +1,60 @@
-# React + Vite
+## 섹션 5: React.js 입문
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- StrictMode: 개발자모드로 리액트를 실행하고 있을 때 혹시나 잠재적으로 문제가 있는지 내부적으로 검사해서 경고해주는 도구
 
-Currently, two official plugins are available:
+- 컴포넌트를 생성하는 함수의 이름은 첫 글자 무조건 대문자
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- App 컴포넌트는 기본적으로 최상위 컴포넌트, 즉 root 컴포넌트(바꿀 수 있음)
 
-## React Compiler
+<img width="720" height="405" alt="image" src="https://github.com/user-attachments/assets/7b04d190-6db1-418d-a8c7-c3211e6128ad" />
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
+- JSX(JavaScript Extensions): 확장된 자바스크립트의 문법
+- JSX 주의 사항
+    - 중괄호 내부에는 자바스크립트 표현식만 넣을 수 있다.
+    - 숫자, 문자열, 배열 값만 렌더링 된다.
+    - 모든 태그는 닫혀있어야 한다.
+    - 최상위 태그는 반드시 하나여야만 한다.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Props란: 컴포넌트에 전달되는 값들
+    - 문자열이나 숫자같은 일반적인 자바스크립트 값뿐만 아니라 HTML 요소나 리액트 컴포넌트도 전달 가능
+    - 자식 요소로 배치되어서 전달된 HTML 요소나 컴포넌트는 자식 컴포넌트에게 children이라는 이름의 props로 자동 전달된다.
+
+- 이벤트 핸들링(Event Handling)이란
+    - Event: 웹 내부에서 발생하는 사용자의 행동(버튼 클릭, 메시지 입력, 스크롤 등등)
+    - Handling: 다루다, 취급하다, 처리하다
+    - 이벤트 핸들링(Event Handling): 이벤트가 발생했을 때 그것을 처리하는 것
+        - onClick, onMouseEnter 등
+
+- 합성 이벤트(Synthetic Base Event)란
+    - 합성 이벤트: 모든 웹 브라우저의 이벤트 객체를 하나로 통일한 상태
+    - 너무나 많은 브라우저들, 만드는 회사들도 다 다름, 동작도 조금씩 다름 → Event 객체가 서로 다름 → 브라우저별 스펙이 달라 발생하는 문제 Cross Browsing Issue → 이를 해결해주는 것이 합성 이벤트라는 객체
+
+- State: 현재 가지고 있는 형태나 모양을 정의, 변화할 수 있는 동적인 값
+    - 리액트 컴포넌트들은 이 state를 모두 가질 수 있음. 이 state의 값에 따라 UI를 다르게 렌더링할 수 있음
+        - 컴포넌트의 state의 값이 바뀔 때 Re-Render, Re-Rendering 발생
+- 새로운 state를 생성하는 **useState**라는 함수는 인수로 state의 초기값을 받아서 두 개의 요소를 담은 배열을 반환
+    - 첫 번째: state의 현재 값
+    - 두 번째: state를 변경시키는 상태 변화 함수
+- 자식 컴포넌트는 부모로부터 받는 props의 값이 바뀌면 리렌더링이 발생함
+
+- 리액트 컴포넌트의 리렌더링이 발생하는 상황
+    - 자신이 관리하는 state의 값이 변경되었을 때 리렌더링
+    - 자신이 제공받는 props의 값이 변경될 때 리렌더링
+    - 부모 컴포넌트가 리렌더링 되면 자식 컴포넌트도 리렌더링
+        - 자식 컴포넌트가 많아지면 성능에 영향
+
+- **useRef**: 새로운 Reference 객체를 생성하는 기능
+    - useState와 컴포넌트 내부의 변수로 활용 가능하다는 점이 동일하지만, useState는 값이 변경되면 컴포넌트를 리렌더링 시키는 반면 useRef는 값이 변경되어도 리렌더링 시키지 않음
+    - 특정 요소에 포커스 주기, 요소의 스타일을 변경시키는 등 손쉽게 가능
+
+- React Hooks
+    - 클래스 컴포넌트의 기능을 함수 컴포넌트에서도 이용할 수 있도록 도와주는 메서드
+    - useState, useRef… → 이름 앞에 use 접두사가 붙는다는 특징
+    - 조건문, 반복문에서 호출 불가능
+
+- 3가지 hook 관련된 팁
+    - 함수 컴포넌트, 커스텀 훅 내부에서만 호출 가능
+    - 조건부로 호출될 수는 없다
+    - 나만의 훅(Custom Hook)을 직접 만들 수 있다
+        - function 이름 앞에 접두사 use 만 쓰면 자동으로 커스텀 훅
