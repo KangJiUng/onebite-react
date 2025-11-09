@@ -6,37 +6,37 @@
 import { useState } from "react";
 
 const Register = () => {
-  const [name, setName] = useState("이름");
-  const [birth, setBirth] = useState("");
-  const [country, setCountry] = useState("");
-  const [bio, setBio] = useState("");
+  const [input, setInput] = useState({
+    name: "",
+    birth: "",
+    country: "",
+    bio: "",
+  });
 
-  const onChangeName = (e) => {
-    setName(e.target.value);
-  };
-
-  const onChangeBirth = (e) => {
-    setBirth(e.target.value);
-  };
-
-  const onChangCountry = (e) => {
-    setCountry(e.target.value);
-  };
-
-  const onChangBio = (e) => {
-    setBio(e.target.value);
+  const onChange = (e) => {
+    setInput({ ...input, [e.target.name]: e.target.value });
   };
 
   return (
     <div>
       <div>
-        <input value={name} onChange={onChangeName} placeholder={"이름"} />
+        <input
+          name="name"
+          value={input.name}
+          onChange={onChange}
+          placeholder={"이름"}
+        />
       </div>
       <div>
-        <input type="date" value={birth} onChange={onChangeBirth} />
+        <input
+          type="date"
+          name="name"
+          value={input.birth}
+          onChange={onChange}
+        />
       </div>
       <div>
-        <select value={country} onChange={onChangCountry}>
+        <select name="name" value={input.country} onChange={onChange}>
           <option></option> {/* select는 자동으로 첫 옵션을 기본값으로 설정*/}
           <option value="kr">한국</option>
           <option value="us">미국</option>
@@ -44,7 +44,7 @@ const Register = () => {
         </select>
       </div>
       <div>
-        <textarea value={bio} onChange={onChangBio} />
+        <textarea name="name" value={input.bio} onChange={onChange} />
       </div>
     </div>
   );
