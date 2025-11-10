@@ -1,16 +1,7 @@
-# React + Vite
+## 섹션 5: 프로젝트 1. 카운터 앱
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 리액트에서 화면을 구성할 때 여러 개의 컴포넌트들이 서로 부모와 자식 관계를 이루며 계층 구조를 이룬다.
+- props는 오직 부모에서 자식에게만 전달될 수 있다. → 자식끼리 전달 불가
+    - 하나의 스테이트를 여러 컴포넌트에서 관리하게 될 경우 해당 스테이트는 반드시 컴포넌트들의 공통 부모가 되는 곳에서 관리해야한다.
+    - **State Lifting**(State 끌어올리기)
+    - 리액트의 데이터흐름: 단방향 데이터 흐름(Unidirectional Date Flow)
