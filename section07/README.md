@@ -1,16 +1,56 @@
-# React + Vite
+## 섹션 7: 라이프 사이클
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- 리액트의 컴포넌트들은 인간과 비슷한 라이프 사이클을 갖는다.
+    - Mount → Update → UnMount
+    - Mount: 컴포넌트가 화면에 처음으로 렌더링 되는 순간(**탄생**)
+        - “A 컴포넌트가 Mount 되었다.” ⇒ A 컴포넌트가 화면에 처음으로 렌더링 되었다.
+    - Update: 컴포넌트가 다시 렌더링되는 순간, 즉 리렌더링되는 순간(**변화**)
+        - “A 컴포넌트가 Update 되었다.” ⇒ A 컴포넌트가 리렌더링 되었다.
+    - UnMount: 컴포넌트가 화면에서 사라지는 순간(렌더링에서 제외되는 순간)(**죽음**)
+        - “A 컴포넌트가 UnMount 되었다.” ⇒ A 컴포넌트가 화면에서 사라졌다.
 
-Currently, two official plugins are available:
+- 라이프 사이클 제어: 컴포넌트의 라이프 사이클 단계별로 컴퍼넌트들이 각각 다른 작업을 수행하도록 만드는 것
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **useEffect**: 리액트 컴포넌트의 사이드 이펙트를 제어하는 React Hook
+    - 사이드 이펙트: 어떠한 동작에 따라 파생되는 효과들
+    - 라이프 사이클을 제어하는 것도 모두 결국 컴퍼넌트의 사이드 이펙트라고 볼 수 있음
 
-## React Compiler
+- 그냥 이벤트핸들러 함수 안에다가 넣으면 안되나?
+    - 리액트의 상태 변화 함수는 비동기로 동작, 즉 여기서 호출했지만 함수의 완료는 나중에 뒤늦게 되는 것
+        - 그래서 상태를 console.log에 찍어보면 변경되기 이전의 값을 콘솔에 출력하는 것을 볼 수 있다.
+    - 리액트의 스테이트는 이렇듯 비동기로 업데이트가 되기 때문에 우리가 변경된 스테이트의 값을 바로 사용해서 Side Effect에 해당하는 부가적인 작업을 진행하려면 useEffect를 이용해야 된다.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 라이프 사이클 제어하기
+    - useEffect의 두 번째 인자 의존성 배열(dependency array = deps)이 제어한다.
+    - 마운트: 탄생
+        - 컴포넌트가 마운트 되었을 때만 최초로 한 번 실행시키고 싶은 코드가 있다면 deps를 빈 배열로 두기
+        ```jsx
+        useEffect(() => {
+            console.log("mount");
+          }, []);
+        ```
+    - 업데이트: 변화, 리렌더링
+        - 컴포넌트가 업데이트될 때마다 실행시키고 싶은 코드가 있다면 deps를 생략하기
+        - 마운트 시점을 제외하고 업데이트가 되는 순간에만 콜백 함수를 실행하고 싶다면 현재 컴퍼넌트가 마운트가 되었는지 안 되었는지를 체크하는 변수를 useRef를 이용해서 하나 만들기
+        ```jsx
+        useEffect(() => {
+          if (!isMount.current) {
+            isMount.current = true;
+            return;
+          }
+          console.log("update")
+        });
+        ```
+    - 언마운트: 죽음
+        - 클린업, 정리함수: useEffect의 콜백 함수가 반환하는 함수
+            - useEffect가 끝날 때 실행된다.
+        ```jsx
+        useEffect(() => {
+          return () => {
+            console.log("unmount");
+          };
+        }, []);
+        ```
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 크롬 확장 프로그램 - React Developer Tools
+    - 개발자모드에서 리액트에 최적화된 여러 기능을 제공하는 도구
