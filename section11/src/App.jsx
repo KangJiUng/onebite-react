@@ -46,7 +46,7 @@ function reducer(state, action) {
   }
 }
 
-const TodoContext = createContext();
+export const TodoContext = createContext();
 console.log(TodoContext);
 
 function App() {
@@ -82,9 +82,9 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <TodoContext.Provider value={(todos, onCreate, on)}>
-        <Editor onCreate={onCreate} />
-        <List todos={todos} onUpdate={onUpdate} onDelete={onDelete} />
+      <TodoContext.Provider value={(todos, onCreate, onDelete, onUpdate)}>
+        <Editor />
+        <List />
       </TodoContext.Provider>
     </div>
   );
