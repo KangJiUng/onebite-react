@@ -1,16 +1,18 @@
-# React + Vite
+## 섹션 9: useReducer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- useReducer
+    - 컴포넌트 내부에 새로운 State를 생성하는 React Hook
+    - 모든 useState는 useReducer로 대체 가능
+    - useState는 상태 관리 코드를 컴포넌트 내부에만 작성해야 하지만 useReducer는 상태 관리 코드를 컴포넌트 외부로 분리할 수 있다는 핵심적인 차이가 있음 → 컴포넌트 내부를 비교적 간결하게 유지 가능
 
-Currently, two official plugins are available:
+- dispatch: 발송하다, 급송하다 -> 상태 변화가 있어야 한다는 사실을 알리는 함수
+    - action 객체: 인수로 전달된 요청의 내용을 담고 있는 객체
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- DELETE 기능 filter( ) 이해
 
-## React Compiler
+```jsx
+state.filter((item) => item.id !== action.targetId);
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. `item.id !== targetId`가 true이면 살아남고 false이면 삭제된다.
+2. 즉 targetId와 같은 id를 가진 item만 false → 제거된다.
