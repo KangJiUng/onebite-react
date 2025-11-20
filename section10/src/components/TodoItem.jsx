@@ -1,4 +1,5 @@
 import "./TodoItem.css";
+import { memo } from "react";
 
 const TodoItem = ({ id, isDone, content, date, onUpdate, onDelete }) => {
   const onChangeCheckbox = () => {
@@ -24,4 +25,16 @@ const TodoItem = ({ id, isDone, content, date, onUpdate, onDelete }) => {
   );
 };
 
-export default TodoItem;
+// 고차 컴포넌트(HOC): 인수로 받은 컴포넌트에 기능이 추가된 새로운 컴포넌트를 반환해주는 메서드 (memo 등)
+export default memo(TodoItem, (prevProps, nextProps) => {
+  // 반환값에 따라 props가 바뀌었는지 안 바뀌었는지 판단
+  // T -> props 바뀌지 않음 -> 리렌더링 X
+  // F -> props 바뀜 -> 리렌더링 O
+
+  if (prevProps.id !== nextProps.id) return false;
+  if (prevProps.isDone !== nextProps.isDone) return false;
+  if (prevProps.content !== nextProps.content) return false;
+  if (prevProps.date !== nextProps.date) return false;
+
+  return true;
+});
