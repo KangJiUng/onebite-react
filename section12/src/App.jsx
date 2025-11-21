@@ -4,11 +4,7 @@ import Home from "./pages/Home";
 import New from "./pages/New";
 import Diary from "./pages/Diary";
 import Notfound from "./pages/NotFound";
-import emotion1 from "./assets/emotion1.png";
-import emotion2 from "./assets/emotion2.png";
-import emotion3 from "./assets/emotion3.png";
-import emotion4 from "./assets/emotion4.png";
-import emotion5 from "./assets/emotion5.png";
+import getEmotionImage from "./util/get-emotion-image";
 
 // 1. "/": 모든 일기를 조회하는 Home 페이지
 // 2. "/new": 새로운 일기를 작성하는 New 페이지
@@ -22,23 +18,12 @@ function App() {
 
   return (
     <>
-      {/* 이미지를 public에서 불러옴 -> Vite의 이미지 최적화 진행 X */}
       <div>
-        <img src={"/emotion1.png"} />
-        <img src={"/emotion2.png"} />
-        <img src={"/emotion3.png"} />
-        <img src={"/emotion4.png"} />
-        <img src={"/emotion5.png"} />
-      </div>
-
-      {/* 이미지를 assets에서 불러옴 -> Vite의 이미지 최적화 진행 O */}
-      {/* 소수의 이미지는 assets에 저장하는 것을 권장 */}
-      <div>
-        <img src={emotion1} />
-        <img src={emotion2} />
-        <img src={emotion3} />
-        <img src={emotion4} />
-        <img src={emotion5} />
+        <img src={getEmotionImage(1)} />
+        <img src={getEmotionImage(2)} />
+        <img src={getEmotionImage(3)} />
+        <img src={getEmotionImage(4)} />
+        <img src={getEmotionImage(5)} />
       </div>
       <div>
         <Link to={"/"}>Home</Link>
