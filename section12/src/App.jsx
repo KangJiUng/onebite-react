@@ -2,10 +2,10 @@ import "./App.css";
 import { useReducer, useRef, createContext, useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import New from "./pages/New";
 import Diary from "./pages/Diary";
+import New from "./pages/New";
 import Edit from "./pages/Edit";
-import Notfound from "./pages/NotFound";
+import Notfound from "./pages/Notfound";
 
 function reducer(state, action) {
   let nextState;
@@ -46,18 +46,20 @@ function App() {
   useEffect(() => {
     const storedData = localStorage.getItem("diary");
     if (!storedData) {
+      setIsLoading(false);
       return;
     }
-    const parsedData = JSON.parse(storedData);
 
+    const parsedData = JSON.parse(storedData);
     if (!Array.isArray(parsedData)) {
       setIsLoading(false);
       return;
     }
+
     let maxId = 0;
     parsedData.forEach((item) => {
       if (Number(item.id) > maxId) {
-        maxId = Number(item.id);
+        maxId = item.id;
       }
     });
 
@@ -67,7 +69,6 @@ function App() {
       type: "INIT",
       data: parsedData,
     });
-
     setIsLoading(false);
   }, []);
 
@@ -75,7 +76,12 @@ function App() {
   const onCreate = (createdDate, emotionId, content) => {
     dispatch({
       type: "CREATE",
-      data: { id: idRef.current++, createdDate, emotionId, content },
+      data: {
+        id: idRef.current++,
+        createdDate,
+        emotionId,
+        content,
+      },
     });
   };
 
@@ -83,7 +89,12 @@ function App() {
   const onUpdate = (id, createdDate, emotionId, content) => {
     dispatch({
       type: "UPDATE",
-      data: { id, createdDate, emotionId, content },
+      data: {
+        id,
+        createdDate,
+        emotionId,
+        content,
+      },
     });
   };
 
@@ -96,13 +107,20 @@ function App() {
   };
 
   if (isLoading) {
-    return <div>데이터 로딩 중입니다...</div>;
+    setIsLoading(false);
+    return <div>데이터 로딩중입니다 ...</div>;
   }
 
   return (
     <>
       <DiaryStateContext.Provider value={data}>
-        <DiaryDispatchContext.Provider value={{ onCreate, onUpdate, onDelete }}>
+        <DiaryDispatchContext.Provider
+          value={{
+            onCreate,
+            onUpdate,
+            onDelete,
+          }}
+        >
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/new" element={<New />} />
