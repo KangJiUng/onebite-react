@@ -1,16 +1,166 @@
-# React + Vite
+## 섹션 12: 프로젝트 3. 감정 일기장
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 1) 페이지 라우팅
 
-Currently, two official plugins are available:
+- 페이지 라우팅(Page Routing): 경로에 따라 알맞은 페이지를 렌더링하는 과정
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 페이지 라우팅의 원리
+    
+    → 전통적인 웹서비스들은 웹서버가 사용자들에게 제공해줘야 하는 모든 페이지들에 해당하는 HTML 파일들을 다 가지고 있음
+    
+    → 이때 브라우저에서 /blog 처럼 특정 주소를 갖는 어떤 페이지를 요청하게 되면 서버는 해당 요청에 맞는 페이지를 찾아서 해당 페이지를 그대로 반환
+    
+    → 브라우저는 서버로부터 받은 HTML 페이지를 그대로 화면에 렌더링
+    
+- **멀티 페이지 애플리케이션(Multi Page Application, MPA)**: 서버가 사용자들에게 제공해줘야 하는 모든 페이지들에 해당하는 HTML 파일들을 미리 가지고 있는 방식
+    - 애초에 서버가 여러 개의 페이지를 가지고 있음
+    - 많은 서비스가 사용하는 전통적인 방식
+    - 리액트는 이 방식을 따르지 않음 → 쾌적한 페이지 이동 제공이 어렵기 때문
+        - 공통으로 사용되는 요소가 있다고 하더라도 원본을 전부 다 제거하고 아예 새로운 HTML로 페이지를 처음부터 그려내기 때문에 비효율적
+        - 렌더링 과정에서 화면이 깜빡이는 모습 때문에 페이지 이동 시 매끄럽지 않음
+        - 모든 사용자들이 페이지를 이동할 때마다 일일이 서버에게 새로운 페이지를 요청 → 동시에 아주 많은 사용자가 페이지에 접속할 경우 서버가 겪는 부하가 매우 심해지게 됨
 
-## React Compiler
+- **서버 사이드 렌더링(Server Side Rendering, SSR)**: MPA 방식에서 브라우저가 새로운 페이지를 요청했을 때 서버 측에서 미리 완성해 놓은 HTML 파일을 보내주면 브라우저가 그대로 렌더링하는 방식
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **싱글 페이지 애플리케이션(Single Page Application, SPA)**: 리액트 웹 서버가 페이지를 딱 하나만 가지고 있고 추가적으로 리액트 컴포넌트, 자바스크립트 페이지 등이 존재
+    - 리액트 웹서버에 사용자가 접속을 요청하게 되면 어떠한 경로로 요청을 했든 간에 관계없이 브라우저에게 무조건 **index.html** 파일을 보내주게 됨
+        
+        → 브라우저는 빈 껍데기 역할의 index.html을 먼저 렌더링(main.jsx 가동 역할만 수행)
+        
+        → 리액트 웹 서버는 번들링한 번들 파일을 브라우저에게 추가로 전달
+        
+        → 브라우저는 전달 받은 번들 파일을 직접 실행하여 main.jsx에 있던 render 메서드가 호출되면서 앱 컴포넌트들을 화면에 실제로 렌더링
+        
+        → 결국 리액트 웹서버는 브라우저가 접속 요청을 하면 번들링된 리액트 앱을 그대로 브라우저에게 전ㄷ날해주는 역할
+        
+    - 페이지 이동이 발생하게 된다면 MPA 방식과는 달리 서버에게는 아무런 요청도 보내지 않음 대신 리액트 앱(번들 파일)을 이용하여 자체적으로 브라우저 내에서 새로운 페이지에 필요한 컴포넌트들로 화면을 교체
+        - 리액트 앱(번들 파일)에는 모든 자바스크립트 파일들의 정보가 번들링 되어 있기 때문에 리액트 문법으로 작성하는 모든 페이지 정보도 다 포함이 되어 있기 때문에 가능한 것
+        - 페이지 이동이 발생해도 효율적인 처리가 가능하고 깜빡임없이 쾌적하게 이동이 가능함
 
-## Expanding the ESLint configuration
+- **클라이언트 사이드 렌더링(Client Side Rendering, CSR)**: 브라우저에서 직접 자바스크립트 파일을 실행해서 화면을 렌더링하도록 하는 방식
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 번들링(Bundling): 리액트 컴포넌트들이나 기능들이 작성되어 있는 모든 자바스크립트 파일들을 하나의 파일로 묶어주는 과정
+    - Vite, Webpack 등
+- 번들 파일: 번들링되어서 브라우저에게 전달되는 자바스크립트 파일
+    - 모든 리액트 컴포넌트들이 하나의 파일로 묶여있는 자바스크립트 파일이기 때문에 사실상 ‘리액트 앱’이라고 부를 수 있음
+
+- 그런데 왜 기업들은 SSR 경험이 있는 프론트엔드 개발자를 우대할까?
+
+### [React Router 라이브러리]
+
+- BrowserRouter
+    - 앱 컴포넌트를 감싸서 리액트 앱의 모든 컴포넌트들이 페이지 라우팅과 관련된 모든 데이터를 공급받아서 사용할 수 있도록 함
+
+- 페이지 라우터 시 * 를 사용하면 와일드카드 → switch-case문의 default 역할
+
+```jsx
+<Routes>
+  <Route path="/" element={<Home />} />
+  <Route path="/new" element={<New />} />
+  <Route path="/diary" element={<Diary />} />
+  <Route path="*" element={<Notfound />} />
+</Routes>
+```
+
+- Routes 컴포넌트 사용 시 주의할 점
+    - Routes 안에는 Route 컴포넌트만 사용 가능
+    - Routes 밖의 요소는 어떤 페이지든 다 렌더링이 됨
+        - 특수한 경우가 아니면 바깥에 사용 X
+
+- Link 컴포넌트
+    - 페이지를 이동시키는 별도의 컴포넌트
+    - 하이퍼링크같은 링크가 필요할 때 사용
+    - HTML의 A태그를 대체하는 기능
+        - A 태그는 서버가 HTML을 통째로 다시 보내면 브라우저가 렌더링, 비효율
+            - SSR랑 뭐가 다름? → SSR는 서버가 렌더링까지 끝낸 HTML를 전달하지만 이 경우는 브라우저가 HTML를 받아서 렌더링
+
+```jsx
+<div>
+  {/* CSR */}
+  <Link to={"/"}>Home</Link>
+  <Link to={"/new"}>New</Link>
+  <Link to={"/diary"}>Diary</Link>
+
+  {/* 서버가 HTML을 통째로 다시 보내면 브라우저가 렌더링 */}
+  <a href="/">Home</a>
+  <a href="/new">New</a>
+  <a href="/diary">Diary</a>
+</div>
+```
+
+- useNavigate
+    - 페이지를 이동시키는 리액트 커스텀 훅, 비동기적으로 작용(7v 이후)
+        - 컴포넌트가 마운트되기 전에 호출되면 사용되지 않음에 주의 → useEffect를 사용
+    - Link와 달리 특정 조건에 따라서 페이지를 이동시켜야 할 때 사용
+    - 인수에 -1을 넣으면 뒤로가기, 두 번째 인자에 객체로 옵션을 줄 수 있음
+        - replace: true → 뒤로가기 불가능
+    
+    ```jsx
+    nav("/", { replace: true });
+    ```
+    
+
+- 동적 경로 방식
+    - URL Parameter: / 뒤에 아이템의 id를 명시
+        - ex) ~/product/1,  ~/product/2,  ~/product/3
+    
+    ```jsx
+    <Route path="/diary/:id" element={<Diary />} />
+    ```
+    
+    - Query String: ? 뒤에 변수명과 값 명시
+        - ex) ~/search?q=검색어
+    
+    ```jsx
+    import { useSearchParams } from "react-router-dom";
+    
+    const Home = () => {
+      const [params, setParams] = useSearchParams();
+      console.log(params.get("value")); // ?value=값으로 전달한 값을 get
+    
+      return <div>Home</div>;
+    };
+    
+    export default Home;
+    ```
+    
+
+---
+
+## 2) 폰트, 이미지, 레이아웃 설정하기
+
+- 폰트 파일은 public에, 이미지 파일은 assets에 넣어준 이유?
+    - vite가 내부적으로 진행하는 이미지 최적화 설정 때문
+    - 이미지를 public에 넣어서 불러오면 vite는 이미지 최적화를 동작하지 않음
+    - Data URL: 이미지와 같은 외부 데이터들을 문자열 형태로 브라우저의 메모리에 캐싱하기 위해 사용되는 포맷
+    - 소수의 이미지의 경우는 assets에 넣어 사용하는 게 좋지만 이미지가 매우 많은 경우는 오히려 public에 넣어 사용하는 것이 나을 수 있다
+<img width="1422" height="822" alt="image" src="https://github.com/user-attachments/assets/907320b8-24fe-44c8-989f-1cb00e5289df" />
+
+
+---
+
+## 3) 웹 스토리지 이용하기
+
+- 모든 리액트의 스테이트는 사실 내부적으로 자바스크립트 변수에 저장된 값이나 다름이 없기 때문에 페이지가 새로고침 되어서 리액트 앱이 다시 동작하게 되면 스테이트의 값 또한 당연히 함께 초기화 → 보관을 원하면 외부 데이터베이스를 사용
+
+- 웹 스토리지: 웹 브라우저 내에 기본적으로 내장이 되어 있는 데이터베이스
+    - SessionStorage - SessionStorage() 내장 함수 이용
+        - 브라우저 탭 별로 데이터를 보관
+        - 탭이 종료되기 전에는 데이터 유지(새로고침)
+        - 탭이 종료되거나 꺼지면 데이터 삭제
+    - LocalStorage - LocalStorage() 내장 함수 이용
+        - 사이트 주소 별로 데이터 보관
+        - 사용자가 직접 삭제하기 전까진 데이터 보관
+
+- JSON.stringify() : 인수로 전달된 객체를 문자열로 변환시켜주는 역할
+    - 객체 타입의 값을 그대로 로컬 스토리지 안에 보관하도록 설정하면 값이 제대로 저장되지 않기 때문에 사용
+- JSON.parse() : 인수로 전달한 객체 형태의 문자열을 파싱해서 객체로 다시 변환시켜주는 역할
+    - 인수로 전달한 값이 undefined거나 null이면 오류가 발생하므로 에러처리 필요
+
+---
+
+## 4) 배포하기
+
+- vercel 이용
+<img width="1886" height="936" alt="image" src="https://github.com/user-attachments/assets/dd365473-8aa9-4601-89e1-e85592b32596" />
+
