@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import Button from "../components/Button";
 import DiaryList from "../components/DiaryList";
 import { DiaryStateContext } from "../App";
+import usePageTitle from "../hooks/usePageTitle";
 
 const getMontlyDate = (pivotDate, data) => {
   // 달의 첫 날의 첫 시간
@@ -33,6 +34,7 @@ const getMontlyDate = (pivotDate, data) => {
 const Home = () => {
   const data = useContext(DiaryStateContext);
   const [pivotDate, setPivotDate] = useState(new Date());
+  usePageTitle("감정 일기장");
 
   const monthlyData = getMontlyDate(pivotDate, data);
 
